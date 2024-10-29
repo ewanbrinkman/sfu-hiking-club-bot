@@ -1,4 +1,10 @@
-import { Client, GatewayIntentBits, Message, ActivityType } from "discord.js";
+import {
+  Client,
+  GatewayIntentBits,
+  Message,
+  PartialMessage,
+  ActivityType,
+} from "discord.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -19,19 +25,59 @@ client.once("ready", () => {
     activities: [
       {
         name: "Watching for scam Taylor Swift tickets",
-        type: ActivityType.Custom,
+        type: ActivityType.Watching,
       },
     ],
     status: "online",
   });
 });
 
-client.on("messageCreate", (message: Message) => {
-  // Check if the message was sent by a bot, if so, ignore it.
-  if (message.author.bot) return;
+// Helper function to normalize zero-width spaces and other formats
+function normalizeContent(content: string): string {
+  // Normalize zero-width spaces, remove spaces between letters, and lowercase the text
+  content = content
+    .replace(/[\u200B-\u200D\uFEFF]/g, "") // Remove zero-width spaces
+    .replace(/\s+/g, "") // Remove all spaces
+    .toLowerCase(); // Convert to lowercase
 
-  // Convert the message content to lowercase and check for required keywords
-  const content = message.content.toLowerCase();
+  // Replace regional indicator emojis with corresponding alphabet letters
+  content = content
+    .replace(/🇦/g, "a")
+    .replace(/🇧/g, "b")
+    .replace(/🇨/g, "c")
+    .replace(/🇩/g, "d")
+    .replace(/🇪/g, "e")
+    .replace(/🇫/g, "f")
+    .replace(/🇬/g, "g")
+    .replace(/🇭/g, "h")
+    .replace(/🇮/g, "i")
+    .replace(/🇯/g, "j")
+    .replace(/🇰/g, "k")
+    .replace(/🇱/g, "l")
+    .replace(/🇲/g, "m")
+    .replace(/🇳/g, "n")
+    .replace(/🇴/g, "o")
+    .replace(/🇵/g, "p")
+    .replace(/🇶/g, "q")
+    .replace(/🇷/g, "r")
+    .replace(/🇸/g, "s")
+    .replace(/🇹/g, "t")
+    .replace(/🇺/g, "u")
+    .replace(/🇻/g, "v")
+    .replace(/🇼/g, "w")
+    .replace(/🇽/g, "x")
+    .replace(/🇾/g, "y")
+    .replace(/🇿/g, "z");
+
+  return content;
+}
+
+// Function to check message content for keywords
+function checkMessageContent(message: Message | PartialMessage) {
+  if (message.author?.bot) return;
+
+  const content = normalizeContent(message.content || "");
+
   if (
     content.includes("taylor") &&
     content.includes("swift") &&
@@ -41,6 +87,22 @@ client.on("messageCreate", (message: Message) => {
       "Please sell Taylor Swift scam tickets here (or else you will be banned): <#1281404126374400020>"
     );
   }
+}
+
+// Event listener for new messages
+client.on("messageCreate", (message: Message) => {
+  checkMessageContent(message);
 });
+
+// Event listener for edited messages
+client.on(
+  "messageUpdate",
+  (
+    oldMessage: Message | PartialMessage,
+    newMessage: Message | PartialMessage
+  ) => {
+    checkMessageContent(newMessage);
+  }
+);
 
 client.login(process.env.TOKEN);
