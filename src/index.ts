@@ -70,7 +70,7 @@ function normalizeContent(content: string): string {
     .replace(/🇿/g, "z");
 
   // Replace common visually similar substitutions
-  content = content.replace(/1/g, "l").replace(/!/g, "i");
+  content = content.replace("i", "l");
 
   return content;
 }
