@@ -6,7 +6,6 @@ import {
   ActivityType,
 } from "discord.js";
 import dotenv from "dotenv";
-import Fuse from "fuse.js";
 
 dotenv.config();
 
@@ -158,17 +157,29 @@ function checkMessageContent(message: Message | PartialMessage) {
       content.includes("ticket")) ||
     content.includes("🪡💨🎟️")
   ) {
-    if (message.channelId === "1281404126374400020") {
-      message.reply(
-        "This is the correct channel to sell Taylor Swift scam tickets. However, it is still a bannable offense."
-      );
+    const userId = message.author?.id;
+    const trusted = userId === process.env.TRUSTED_USER;
+
+    if (trusted && (content.includes("!") || content.includes("not"))) {
+      message.react("<:tay_thumbsup:1301054437112021082>");
     } else {
-      message.reply(
-        "Please sell Taylor Swift scam tickets in the correct channel or you will be banned: <#1281404126374400020> (you will also be banned if you post them in the correct channel anyways)."
-      );
+      if (message.channelId === "1281404126374400020") {
+        if (userId === process.env.USER_2 && content.includes("not")) {
+          message.reply("Are you sure you aren't selling them? :devastated:");
+        } else {
+          message.reply(
+            "This is the correct channel to sell Taylor Swift scam tickets. However, it is still a bannable offense."
+          );
+        }
+      } else {
+        message.reply(
+          "Please sell Taylor Swift scam tickets in the correct channel or you will be banned: <#1281404126374400020> (you will also be banned if you post them in the correct channel anyways)."
+        );
+      }
+      message.react("<:tay_wave:1279609313433882705>");
     }
-    message.react("<:tay_wave:1279609313433882705>");
   }
+
   if (content.includes("the") && content.includes("cure")) {
     message.react("<:a_forest_the_cure:1301027405321736243>");
   }

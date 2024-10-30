@@ -6,8 +6,7 @@
   },
   "dependencies": {
     "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5",
-    "fuse.js": "^7.0.0"
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "tsup": "^8.3.5",
