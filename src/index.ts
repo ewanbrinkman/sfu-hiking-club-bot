@@ -26,7 +26,7 @@ client.once("ready", () => {
     activities: [
       {
         name: "Watching for scam Taylor Swift tickets",
-        type: ActivityType.Watching,
+        type: ActivityType.Custom,
       },
     ],
     status: "online",
