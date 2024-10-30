@@ -168,7 +168,8 @@ function checkMessageContent(message: Message | PartialMessage) {
       );
     }
     message.react("<:tay_wave:1279609313433882705>");
-  } else if (content.includes("the") && content.includes("cure")) {
+  }
+  if (content.includes("the") && content.includes("cure")) {
     message.react("<:a_forest_the_cure:1301027405321736243>");
   }
 }
